@@ -1,44 +1,44 @@
-# Vagrant.configure(2) do |config|
-#   config.vm.box = "centos/7"
-
-#   config.vm.provider "qemu" do |qe|
-#     qe.arch = "x86_64"
-#     qe.machine = "q35"
-#     qe.cpu = "qemu64"
-#     qe.memory = "1G"
-#     qe.net_device = "virtio-net-pci"
-#   end
-
-#   config.vm.define "rancher" do |rancher|
-#   end
-
-#   config.vm.define "node1" do |node1|
-#   end
-# end
-
-
-# -*- mode: ruby -*-
-# vi: set ft=ruby :
-
-# All Vagrant configuration is done below. The "2" in Vagrant.configure
-# configures the configuration version (always use the latest).
-
 Vagrant.configure("2") do |config|
-  # Set the base box
-  config.vm.box = "ubuntu/bionic64" # Update to "ubuntu/jammy64" for Ubuntu 22.04
+  config.vm.box = "ubuntu/jammy64"
 
-  # Customize the amount of memory on the VM
+  # Base configuration for all VMs
   config.vm.provider "virtualbox" do |vb|
     vb.memory = "1024"
-    vb.cpus = 2
+    vb.cpus = 1
+    # Enable time synchronization
+    vb.customize ["modifyvm", :id, "--rtcuseutc", "on"]
   end
 
+  # Network configuration: Using a private network with DHCP
   config.vm.network "private_network", type: "dhcp"
-  # Sync folder from host to guest
-  config.vm.synced_folder ".", "/vagrant", type: "virtualbox"
-  config.vm.hostname = "ubuntu-vm"
 
-  config.vm.provider "virtualbox" do |vb|
-    vb.name = "ubuntu-vm"
+  # Define Rancher VM
+  config.vm.define "rancher" do |rancher|
+    rancher.vm.hostname = "rancher"
+    rancher.vm.network "private_network", ip: "192.168.56.10"
+    rancher.vm.provider "virtualbox" do |vb|
+      vb.name = "rancher"
+    end
   end
+
+  # Define Node1 VM
+  config.vm.define "node1" do |node1|
+    node1.vm.hostname = "node1"
+    node1.vm.network "private_network", ip: "192.168.56.11"
+    node1.vm.provider "virtualbox" do |vb|
+      vb.name = "node1"
+    end
+  end
+
+  # Define Node2 VM
+  config.vm.define "node2" do |node2|
+    node2.vm.hostname = "node2"
+    node2.vm.network "private_network", ip: "192.168.56.12"
+    node2.vm.provider "virtualbox" do |vb|
+      vb.name = "node2"
+    end
+  end
+
+  # Synced folder to enable host-machine and guest-machine communication
+  config.vm.synced_folder ".", "/vagrant", disabled: true
 end
