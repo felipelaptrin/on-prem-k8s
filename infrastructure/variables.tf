@@ -4,7 +4,12 @@ variable "k3s_version" {
 }
 
 variable "cert_manager_version" {
-  description = "Version of the Cert Manager that will be deployed, as a Rancher dependency. Check all available versions on Github releases page: https://github.com/cert-manager/cert-manager/releases"
+  description = "Cert Manager version that will be deployed, as a Rancher dependency. Check all available versions on Github releases page: https://github.com/cert-manager/cert-manager/releases"
+  type        = string
+}
+
+variable "rancher_version" {
+  description = "Rancher version that will be deployed, as a Rancher dependency. Check all available versions on Github releases page: https://github.com/rancher/rancher/releases"
   type        = string
 }
 

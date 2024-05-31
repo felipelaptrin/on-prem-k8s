@@ -1,12 +1,13 @@
 locals {
-  k3s_install_script_path = "${path.module}/bootstrap"
-  k3s_install_command     = "/bin/bash /tmp/bootstrap/install.sh ${var.k3s_version} ${var.cert_manager_version}"
+  k3s_bootstrap_remote_folder_path = "/tmp/bootstrap"
+  k3s_install_script_path          = "${path.module}/bootstrap"
+  k3s_install_command              = "/bin/bash ${local.k3s_bootstrap_remote_folder_path}/install.sh ${var.k3s_version} ${var.cert_manager_version} ${var.rancher_version} ${local.k3s_bootstrap_remote_folder_path}"
 }
 
 data "archive_file" "check_if_bootstrap_needs_to_run" {
   type        = "zip"
   source_dir  = local.k3s_install_script_path
-  output_path = "/tmp/data.zip"
+  output_path = "/tmp/k3s-bootstrap.zip"
 }
 
 resource "null_resource" "install_k3s" {
@@ -21,13 +22,20 @@ resource "null_resource" "install_k3s" {
 
   provisioner "file" {
     source      = local.k3s_install_script_path
-    destination = "/tmp/bootstrap"
+    destination = local.k3s_bootstrap_remote_folder_path
+  }
+
+  # We can´t have a single 'remote-exec' for running 2 commands because it will
+  # consider that this resource was successful if the last inline command run fine
+  provisioner "remote-exec" {
+    inline = [
+      local.k3s_install_command,
+    ]
   }
 
   provisioner "remote-exec" {
     inline = [
-      local.k3s_install_command,
-      "rm -rf /tmp/bootstrap"
+      "rm -rf ${local.k3s_bootstrap_remote_folder_path}",
     ]
   }
 
