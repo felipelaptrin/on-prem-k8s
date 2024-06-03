@@ -13,6 +13,11 @@ variable "rancher_version" {
   type        = string
 }
 
+variable "rancher_endpoint" {
+  description = "URL that points to the Rancher server"
+  type        = string
+}
+
 variable "management_cluster" {
   description = "Defines the management cluster that will be created."
   type = object({
