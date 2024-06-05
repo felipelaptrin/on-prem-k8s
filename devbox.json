@@ -6,8 +6,14 @@
       "echo 'Welcome to devbox!' > /dev/null"
     ],
     "scripts": {
-      "test": [
-        "echo \"Error: no test specified\" && exit 1"
+      "init": [
+        "tofu init"
+      ],
+      "plan": [
+        "tofu plan"
+      ],
+      "apply": [
+        "tofu apply"
       ]
     }
   }
