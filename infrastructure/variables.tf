@@ -31,11 +31,15 @@ variable "management_cluster" {
 
 variable "managed_cluster" {
   description = "Defines all the clusters that will be created. Also defines all the nodes of the cluster."
-  type = map(list(object({
-    host        = string
-    user        = string
-    password    = string
-    port        = number
-    private_key = string
-  })))
+  type = map(
+    object({
+      kubernetes_version = string
+      nodes = list(object({
+        host        = string
+        user        = string
+        password    = string
+        port        = number
+        private_key = string
+        role        = list(string) # Accept values: etcd, controlplane, worker
+  })) }))
 }
