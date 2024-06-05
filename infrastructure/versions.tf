@@ -17,7 +17,7 @@ provider "local" {}
 provider "rancher2" {
   alias = "bootstrap"
 
-  api_url   = "https://${var.rancher_endpoint}"
+  api_url = "https://${var.rancher_endpoint}"
   # token_key = data.external.fetch_rancher_token.result["output"]
   insecure  = true
   bootstrap = true
