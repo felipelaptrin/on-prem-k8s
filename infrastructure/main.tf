@@ -45,7 +45,6 @@ resource "null_resource" "bootstrap_rancher" {
     ]
   }
 
-  # Triggered if script (or inputs to this script) and Helm Chart Value changed
   triggers = {
     script_hash     = data.archive_file.check_if_bootstrap_needs_to_run.output_sha
     install_command = md5(local.rancher_install_command)
@@ -72,11 +71,11 @@ resource "null_resource" "bootstrap_node" {
   for_each   = { for k, v in local.nodes : k => v }
   connection {
     type        = "ssh"
-    host        = each.value["host"]           #"127.0.0.1"
-    user        = each.value.user              #"vagrant"
-    password    = each.value.password          #"vagrant"
-    port        = each.value.port              # 2200
-    private_key = file(each.value.private_key) #file("/Users/felipe/Desktop/folders/personal/rancher/.vagrant/machines/node01/vmware_fusion/private_key")
+    host        = each.value["host"]
+    user        = each.value.user
+    password    = each.value.password
+    port        = each.value.port
+    private_key = file(each.value.private_key)
   }
 
   provisioner "file" {
@@ -84,8 +83,6 @@ resource "null_resource" "bootstrap_node" {
     destination = local.bootstrap_remote_folder_path
   }
 
-  # We can´t have a single 'remote-exec' for running 2 commands because it will
-  # consider that this resource was successful if the last inline command run fine
   provisioner "remote-exec" {
     inline = [
       "/bin/bash ${local.bootstrap_remote_folder_path}/install-node.sh",

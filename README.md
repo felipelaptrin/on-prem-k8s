@@ -75,7 +75,7 @@ The given example creates a managed K8S node with three nodes, and each node as 
 
 4) Configure Rancher Helm chart values
 
-If you are not using Vagrant, you will need to change the `hostname` of the `infrastructure/bootstrap/values.yaml` file to be the value of the host that will have Rancher installed.
+If you are not using Vagrant, you will need to change the `hostname` of the `infrastructure/bootstrap/values.yaml` file to be the value of the host that will have Rancher installed. If you are using Vagrant, there is no need to change!
 
 5) Deploy using OpenTofu
 

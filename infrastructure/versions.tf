@@ -5,10 +5,6 @@ terraform {
       source  = "rancher/rancher2"
       version = "4.1.0"
     }
-    external = {
-      source  = "hashicorp/external"
-      version = "2.3.3"
-    }
   }
 }
 
