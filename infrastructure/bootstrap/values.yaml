@@ -1,0 +1,3 @@
+hostname: 192.168.110.10.sslip.io
+replicas: 1
+bootstrapPassword: ChangedByTerraform
